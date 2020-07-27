@@ -44,7 +44,7 @@ The Edge manifest must still be manually maintained for routes, properties and m
   },
 ```
 
-When deploying modules, please configure ports to desired settings. The recommendation is to stick to docker guidelines
+When configuring modules, please set ports to desired settings. The recommendation is to stick to docker guidelines
 
 ## How to use in an IoT Central Edge device template (DTDLv1 Device Capability Model)
 Import the following module (dcm) to your IoT Central device template. Ensure the device template has a module for each instance of mock-devices required. When adding the instance update the identity and set "Relationship name" and "Name" to the instance used in the Edge manifest
