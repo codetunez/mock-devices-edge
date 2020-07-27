@@ -21,7 +21,7 @@ mock-devices-edge acts as a sidecar module that controls a running instance of a
   },
 ```
 
-Add as many as instances of mock-devices as needed with each representing one module on the Edge device. When the mock-devices engine is running, the module in mock-devices must match the module id and device id as given by the runtime environment for the module's data to be sent or received.
+Add as many instances of mock-devices as needed with each representing one module on the Edge device. When the mock-devices engine is running, the module in mock-devices must match the module id and device id as given by the runtime environment for the module's data to be sent or received.
 
 ```
   "mockDevicesDe<instance>": {
@@ -36,7 +36,7 @@ Add as many as instances of mock-devices as needed with each representing one mo
   },
 ```
 
-The Edge manifest must still be manually maintained for routes, properties and module naming. This must all be aligned through the ecosystem of choice. This basic route will ensure all telemetry is sent to the hub connected to the Edge device
+The Edge manifest must still be manually maintained for routes, properties and module naming. This must all be aligned through the ecosystem of choice. This basic route will ensure all telemetry is sent to the hub connected to the Edge device and can be added to the manifest json.
 
  ```
   "routes": {
@@ -48,6 +48,8 @@ When deploying modules, please configure ports to desired settings. The recommen
 
 ## How to use in an IoT Central Edge device template (DTDLv1 Device Capability Model)
 Import the following module (dcm) to your IoT Central device template. Ensure the device template has a module for each instance of mock-devices required. When adding the instance update the identity and set "Relationship name" and "Name" to the instance used in the Edge manifest
+
+Where template import is not required, the following json can be remodelled into a custom module definition
 
 ```
 {
@@ -177,7 +179,7 @@ Import the following module (dcm) to your IoT Central device template. Ensure th
 ```
 
 ## Developers
-mock-devices can be fully controlled via REST endpoint and curl and therefore this module can be forked enable more functionality or just bypassed for a custom implementation. Visit [the docs](https://github.com/codetunez/mock-devices-de/blob/master/readme.MD) to see the full API
+mock-devices can be fully controlled via REST endpoint and curl and therefore this module can be forked to enable more functionality or just bypassed for a custom implementation. Visit [the docs](https://github.com/codetunez/mock-devices-de/blob/master/readme.MD) to see the full API
 
 ### Docker build and deploy
 Building the container\
