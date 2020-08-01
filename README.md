@@ -2,7 +2,7 @@
 
 mock-devices-edge is an Azure IoT Edge module that enables basic control of mock-devices when it is deployed as an Edge module
 
-Please visit the links to learn more about mock-devices [for desktop](https://github.com/codetunez/mock-devices/tree/v6) and mock-devices [for docker](https://github.com/codetunez/mock-devices-de/tree/v6) **Ensure the branch is V6**
+Please visit the links to learn more about mock-devices [for desktop](https://github.com/codetunez/mock-devices) and mock-devices [for docker](https://github.com/codetunez/mock-devices-de)
 
 ## Additions to the Edge deployment manifest
 
@@ -47,130 +47,154 @@ The Edge manifest must still be manually maintained for routes, properties and m
 When configuring modules, please set ports to desired settings. The recommendation is to stick to docker guidelines
 
 ## How to use in an IoT Central Edge device template (DTDLv1 Device Capability Model)
-Import the following module (dcm) to your IoT Central device template. Ensure the device template has a module for each instance of mock-devices required. When adding the instance update the identity and set "Relationship name" and "Name" to the instance used in the Edge manifest
+Import the following capability model into a new IoT Central device template. Once imported, add a module for every instance of mock-devices to match the Edge manifest. When adding the instance update the identity and set "Relationship name" and "Name" to the instance values used in the Edge manifest
 
-Where template import is not required, the following json can be remodelled into a custom module definition
+[DCM](/dcm.json)
 
 ```
 {
-  "@id": "urn:codetunezdcm:mockDevicesEdge:1",
+  "@id": "urn:codetunez:edgeDevice:1",
   "@type": "CapabilityModel",
-  "implements": [
-    {
-      "@id": "urn:codetunezdcm:mockDevicesEdge:edgeinstance:1",
-      "@type": "InterfaceInstance",
-      "displayName": {
-        "en": "Init and Control"
-      },
-      "name": "EdgeModule1",
-      "schema": {
-        "@id": "urn:globalns:IMockDevicesEdge:1",
-        "@type": "Interface",
-        "displayName": {
-          "en": "Control plane"
-        },
-        "contents": [
-          {
-            "@id": "urn:globalns:IMockDevicesEdge:fileURI:1",
-            "@type": "Property",
-            "displayName": {
-              "en": "fileURI"
-            },
-            "name": "fileURI",
-            "writable": true,
-            "schema": "string"
-          },
-          {
-            "@id": "urn:globalns:IMockDevicesEdge:start:1",
-            "@type": "Command",
-            "commandType": "synchronous",
-            "durable": false,
-            "request": {
-              "@id": "urn:globalns:IMockDevicesEdge:start:server:1",
-              "@type": "SchemaField",
-              "displayName": {
-                "en": "server"
-              },
-              "name": "server",
-              "schema": "string"
-            },
-            "response": {
-              "@id": "urn:globalns:IMockDevicesEdge:start:res:1",
-              "@type": "SchemaField",
-              "displayName": {
-                "en": "res"
-              },
-              "name": "res",
-              "schema": "string"
-            },
-            "displayName": {
-              "en": "start"
-            },
-            "name": "start"
-          },
-          {
-            "@id": "urn:globalns:IMockDevicesEdge:stop:1",
-            "@type": "Command",
-            "commandType": "synchronous",
-            "durable": false,
-            "request": {
-              "@id": "urn:globalns:IMockDevicesEdge:stop:server:1",
-              "@type": "SchemaField",
-              "displayName": {
-                "en": "server"
-              },
-              "name": "server",
-              "schema": "string"
-            },
-            "response": {
-              "@id": "urn:globalns:IMockDevicesEdge:stop:res:1",
-              "@type": "SchemaField",
-              "displayName": {
-                "en": "res"
-              },
-              "name": "res",
-              "schema": "string"
-            },
-            "displayName": {
-              "en": "stop"
-            },
-            "name": "stop"
-          },
-          {
-            "@id": "urn:globalns:IMockDevicesEdge:restart:1",
-            "@type": "Command",
-            "commandType": "synchronous",
-            "durable": false,
-            "request": {
-              "@id": "urn:globalns:IMockDevicesEdge:restart:server:1",
-              "@type": "SchemaField",
-              "displayName": {
-                "en": "server"
-              },
-              "name": "server",
-              "schema": "string"
-            },
-            "response": {
-              "@id": "urn:globalns:IMockDevicesEdge:restart:res:1",
-              "@type": "SchemaField",
-              "displayName": {
-                "en": "res"
-              },
-              "name": "res",
-              "schema": "string"
-            },
-            "displayName": {
-              "en": "restart"
-            },
-            "name": "restart"
-          }
-        ]
-      }
-    }
-  ],
+  "implements": [],
   "displayName": {
-    "en": "codetunezdcm/mock-devices-edge"
+    "en": "Edge Device"
   },
+  "contents": [
+    {
+      "@id": "urn:codetunez:edgeDevice:EdgeDeviceTemplate_4zg:1",
+      "@type": [
+        "Relationship",
+        "SemanticType/EdgeModule"
+      ],
+      "name": "mockDeviceEdgeModule",
+      "maxMultiplicity": 1,
+      "target": [
+        {
+          "@id": "urn:codetunez:mockDeviceEdgeModule:1",
+          "@type": "CapabilityModel",
+          "implements": [
+            {
+              "@id": "urn:codetunez:mockDeviceEdgeModule:fqghobkce:1",
+              "@type": "InterfaceInstance",
+              "displayName": {
+                "en": "Control Plane"
+              },
+              "name": "mockDeviceEdge",
+              "schema": {
+                "@id": "urn:codetunez:mockDeviceEdge:1",
+                "@type": "Interface",
+                "displayName": {
+                  "en": "Control Plane"
+                },
+                "contents": [
+                  {
+                    "@id": "urn:codetunez:mockDeviceEdge:fileURI:1",
+                    "@type": "Property",
+                    "displayName": {
+                      "en": "fileURI"
+                    },
+                    "name": "fileURI",
+                    "writable": true,
+                    "schema": "string"
+                  },
+                  {
+                    "@id": "urn:codetunez:mockDeviceEdge:start:1",
+                    "@type": "Command",
+                    "commandType": "synchronous",
+                    "durable": false,
+                    "request": {
+                      "@id": "urn:codetunez:mockDeviceEdge:start:req:1",
+                      "@type": "SchemaField",
+                      "displayName": {
+                        "en": "req"
+                      },
+                      "name": "req",
+                      "schema": "string"
+                    },
+                    "response": {
+                      "@id": "urn:codetunez:mockDeviceEdge:start:res:1",
+                      "@type": "SchemaField",
+                      "displayName": {
+                        "en": "res"
+                      },
+                      "name": "res",
+                      "schema": "string"
+                    },
+                    "displayName": {
+                      "en": "start"
+                    },
+                    "name": "start"
+                  },
+                  {
+                    "@id": "urn:codetunez:mockDeviceEdge:stop:1",
+                    "@type": "Command",
+                    "commandType": "synchronous",
+                    "durable": false,
+                    "request": {
+                      "@id": "urn:codetunez:mockDeviceEdge:stop:req:1",
+                      "@type": "SchemaField",
+                      "displayName": {
+                        "en": "req"
+                      },
+                      "name": "req",
+                      "schema": "string"
+                    },
+                    "response": {
+                      "@id": "urn:codetunez:mockDeviceEdge:stop:res:1",
+                      "@type": "SchemaField",
+                      "displayName": {
+                        "en": "res"
+                      },
+                      "name": "res",
+                      "schema": "string"
+                    },
+                    "displayName": {
+                      "en": "stop"
+                    },
+                    "name": "stop"
+                  },
+                  {
+                    "@id": "urn:codetunez:mockDeviceEdge:restart:1",
+                    "@type": "Command",
+                    "commandType": "synchronous",
+                    "durable": false,
+                    "request": {
+                      "@id": "urn:codetunez:mockDeviceEdge:restart:req:1",
+                      "@type": "SchemaField",
+                      "displayName": {
+                        "en": "req"
+                      },
+                      "name": "req",
+                      "schema": "string"
+                    },
+                    "response": {
+                      "@id": "urn:codetunez:mockDeviceEdge:restart:res:1",
+                      "@type": "SchemaField",
+                      "displayName": {
+                        "en": "res"
+                      },
+                      "name": "res",
+                      "schema": "string"
+                    },
+                    "displayName": {
+                      "en": "restart"
+                    },
+                    "name": "restart"
+                  }
+                ]
+              }
+            }
+          ],
+          "displayName": {
+            "en": "codetunez/mock-devices-edge"
+          },
+          "@context": [
+            "http://azureiot.com/v1/contexts/IoTModel.json"
+          ]
+        }
+      ]
+    }    
+  ],
   "@context": [
     "http://azureiot.com/v1/contexts/IoTModel.json"
   ]

@@ -1,0 +1,147 @@
+{
+    "@id": "urn:codetunez:edgeDevice:1",
+    "@type": "CapabilityModel",
+    "implements": [],
+    "displayName": {
+      "en": "Edge Device"
+    },
+    "contents": [
+      {
+        "@id": "urn:codetunez:edgeDevice:EdgeDeviceTemplate_4zg:1",
+        "@type": [
+          "Relationship",
+          "SemanticType/EdgeModule"
+        ],
+        "name": "mockDeviceEdgeModule",
+        "maxMultiplicity": 1,
+        "target": [
+          {
+            "@id": "urn:codetunez:mockDeviceEdgeModule:1",
+            "@type": "CapabilityModel",
+            "implements": [
+              {
+                "@id": "urn:codetunez:mockDeviceEdgeModule:fqghobkce:1",
+                "@type": "InterfaceInstance",
+                "displayName": {
+                  "en": "Control Plane"
+                },
+                "name": "mockDeviceEdge",
+                "schema": {
+                  "@id": "urn:codetunez:mockDeviceEdge:1",
+                  "@type": "Interface",
+                  "displayName": {
+                    "en": "Control Plane"
+                  },
+                  "contents": [
+                    {
+                      "@id": "urn:codetunez:mockDeviceEdge:fileURI:1",
+                      "@type": "Property",
+                      "displayName": {
+                        "en": "fileURI"
+                      },
+                      "name": "fileURI",
+                      "writable": true,
+                      "schema": "string"
+                    },
+                    {
+                      "@id": "urn:codetunez:mockDeviceEdge:start:1",
+                      "@type": "Command",
+                      "commandType": "synchronous",
+                      "durable": false,
+                      "request": {
+                        "@id": "urn:codetunez:mockDeviceEdge:start:req:1",
+                        "@type": "SchemaField",
+                        "displayName": {
+                          "en": "req"
+                        },
+                        "name": "req",
+                        "schema": "string"
+                      },
+                      "response": {
+                        "@id": "urn:codetunez:mockDeviceEdge:start:res:1",
+                        "@type": "SchemaField",
+                        "displayName": {
+                          "en": "res"
+                        },
+                        "name": "res",
+                        "schema": "string"
+                      },
+                      "displayName": {
+                        "en": "start"
+                      },
+                      "name": "start"
+                    },
+                    {
+                      "@id": "urn:codetunez:mockDeviceEdge:stop:1",
+                      "@type": "Command",
+                      "commandType": "synchronous",
+                      "durable": false,
+                      "request": {
+                        "@id": "urn:codetunez:mockDeviceEdge:stop:req:1",
+                        "@type": "SchemaField",
+                        "displayName": {
+                          "en": "req"
+                        },
+                        "name": "req",
+                        "schema": "string"
+                      },
+                      "response": {
+                        "@id": "urn:codetunez:mockDeviceEdge:stop:res:1",
+                        "@type": "SchemaField",
+                        "displayName": {
+                          "en": "res"
+                        },
+                        "name": "res",
+                        "schema": "string"
+                      },
+                      "displayName": {
+                        "en": "stop"
+                      },
+                      "name": "stop"
+                    },
+                    {
+                      "@id": "urn:codetunez:mockDeviceEdge:restart:1",
+                      "@type": "Command",
+                      "commandType": "synchronous",
+                      "durable": false,
+                      "request": {
+                        "@id": "urn:codetunez:mockDeviceEdge:restart:req:1",
+                        "@type": "SchemaField",
+                        "displayName": {
+                          "en": "req"
+                        },
+                        "name": "req",
+                        "schema": "string"
+                      },
+                      "response": {
+                        "@id": "urn:codetunez:mockDeviceEdge:restart:res:1",
+                        "@type": "SchemaField",
+                        "displayName": {
+                          "en": "res"
+                        },
+                        "name": "res",
+                        "schema": "string"
+                      },
+                      "displayName": {
+                        "en": "restart"
+                      },
+                      "name": "restart"
+                    }
+                  ]
+                }
+              }
+            ],
+            "displayName": {
+              "en": "codetunez/mock-devices-edge"
+            },
+            "@context": [
+              "http://azureiot.com/v1/contexts/IoTModel.json"
+            ]
+          }
+        ]
+      }    
+    ],
+    "@context": [
+      "http://azureiot.com/v1/contexts/IoTModel.json"
+    ]
+  }
