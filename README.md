@@ -46,6 +46,24 @@ The Edge manifest must still be manually maintained for routes, properties and m
 
 When configuring modules, please set ports to desired settings. The recommendation is to stick to docker guidelines
 
+## Adding a UX
+The following module configuration will add the mock-devices UX as a module. Use the options in the UX to switch to view any of the other modules running the mock-devices engine.
+
+```
+  "mockDevicesUx": {
+      "version": "1.0",
+      "type": "docker",
+      "status": "running",
+      "restartPolicy": "always",
+      "settings": {
+          "image": "codetunez/mdux:latest",
+          "createOptions": "{}"
+      }
+  },
+```
+
+
+
 ## How to use in an IoT Central Edge device template (DTDLv1 Device Capability Model)
 Import the following capability model into a new IoT Central device template. Once imported, add a module for every instance of mock-devices to match the Edge manifest. When adding the instance update the identity and set "Relationship name" and "Name" to the instance values used in the Edge manifest
 
