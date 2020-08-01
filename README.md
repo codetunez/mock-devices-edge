@@ -47,7 +47,7 @@ The Edge manifest must still be manually maintained for routes, properties and m
 When configuring modules, please set ports to desired settings. The recommendation is to stick to docker guidelines
 
 ## Adding a UX
-The following module configuration will add the mock-devices UX as a module. Use the options in the UX to switch to view any of the other modules running the mock-devices engine.
+The following module configuration will add the mock-devices UX as a module. Use the options in the UX to switch to view any of the other modules running the mock-devices engine. To use the UX, RDP to the local Edge box and launch a browser to http://127.0.0.1:9000. By setting the appropriate createOptions, the UX module on Edge box can be accessed via the local network using the IP and same port i.e. http://192.168.0.2:9000
 
 ```
   "mockDevicesUx": {
