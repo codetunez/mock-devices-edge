@@ -1,12 +1,16 @@
-# mock-devices-edge - v1 Beta
+# mock-devices-edge v1 (Edge Module)
 
-mock-devices-edge is an Azure IoT Edge module that enables basic control of mock-devices when it is deployed as an Edge module
+mock-devices-edge is an Azure IoT Edge Docker container module that enables basic control of mock-devices when the latter is deployed as a simulation engine Edge module. This module can be used to integrate adapters, connectors or anything that can interface with an Edge module. This repo details the steps to add this and instances of mock-device-de as modules in an Edge deployment manifest
 
-Please visit the links to learn more about mock-devices [for desktop](https://github.com/codetunez/mock-devices) and mock-devices [for docker](https://github.com/codetunez/mock-devices-de)
+Please visit the links to learn more about [mock-devices *(desktop edition)*](https://github.com/codetunez/mock-devices) and [mock-devices-de *(docker edition)*](https://github.com/codetunez/mock-devices-de)
 
-## Additions to the Edge deployment manifest
+These docs assume the Edge runtime has already been installed on the Edge Device host PC
 
-mock-devices-edge acts as a sidecar module that controls a running instance of a mock-devices module. The mock-devices state (simulation) file is passed to it via this module and requires the file to be downloaded from a public endpoint. The recommendation here is to use blob storage with a short expire sas token'd url (downloaded via fileURI desired twin). View the main.js file in this repo to see the desired twin and direct commands needed to control the module. Use the following config in the deployment manifest json.
+# Additions to the Edge deployment manifest
+
+To use mock-devices-de in an Edge deployment add the following modules
+
+**mock-devices-edge** is a support module Docker container that is used to control any running module instance of mock-devices-de in the same runtime. A mock-devices state file is passed to an instance of mock-devices-de via this module. The state file will need to be downloaded by this module via a public endpoint. This module has a desired twin the can be used to provide the URI. The recommendation here is to use blob storage with a short expire sas token'd url. This module can also start/stop/restart any running mock-devices engine within the same runtime. This is the configuration for the the deployment manifest
 
 ```
   "mockDevicesEdge": {
@@ -20,34 +24,49 @@ mock-devices-edge acts as a sidecar module that controls a running instance of a
       }
   },
 ```
+See [man.js](/main.js) for full capabilities of this module
 
-Add as many instances of mock-devices as needed with each representing one module on the Edge device. When the mock-devices engine is running, the module in mock-devices must match the module id and device id as given by the runtime environment for the module's data to be sent or received.
+**mock-devices-de** is the mock-devices simulation engine Docker container and is used to run simulated Edge modules. A module instance logically maps to a board or sensor(s) in a single device and therefore multiple instances of this container can be added to the Edge deployment to simulate multiple boards/sensors/devices for the Edge Device. The mock-devices engine for the given module instance will only run the mock-devices module that matches the host module id and device id of the running Edge runtime. This is the configuration for the the deployment manifest
 
 ```
-  "mockDevicesDe<instance>": {
+  "mockDevicesDe<instance_number>": {
       "version": "1.0",
       "type": "docker",
       "status": "running",
       "restartPolicy": "always",
       "settings": {
-          "image": "codetunez/mock-devices:latest",
+          "image": "codetunez/mock-devices-de:latest",
           "createOptions": "{}"
       }
   },
 ```
+Any non modules in the same state file will also run when the mock-devices engine is started. If the state file contains devices and modules, it is not recommended to share the state file between module instances of mock-devices-de. Any non-modules should be removed from the state file if shared state file is required
 
-The Edge manifest must still be manually maintained for routes, properties and module naming. This must all be aligned through the ecosystem of choice. This basic route will ensure all telemetry is sent to the hub connected to the Edge device and can be added to the manifest json.
+### Example createOptions as stringified JSON.
+The HostPort should be changed per module instance of mock-devices-de 
+```
+"createOptions": "{\"HostConfig\":{\"PortBindings\":{\"9000*/tcp\":[{\"HostPort\":\"8787\"}]}}"
+```
+
+### Referencing the correct instance of the mock-devices-de engine
+Examples
+- Within Edge runtime (module to module) - http://mockDevicesDe1:9000
+- On same host Edge PC - http://127.0.0.1:8787
+- On same LAN PC - http://192.168.0.0:8787
+
+### Routes
+
+The Edge manifest must still be manually maintained for routes, properties and module naming and tshis must all be aligned through the ecosystem-runtime-manifest. This basic route will ensure all telemetry is sent to the hub connected to the Edge device and should be added o the manifest json
 
  ```
   "routes": {
       "routes1": "FROM /* INTO $upstream"
   },
 ```
+## Adding a UX module into the deployment manifest
+mock-device-de can be controlled directly by REST, via the mock-device-edge module or using the UX. V6 of the mock-devices UX allows connecting to different mock-devices engines via IP address or DNS. The UX can also be deployed as the following module
 
-When configuring modules, please set ports to desired settings. The recommendation is to stick to docker guidelines
-
-## Adding a UX
-The following module configuration will add the mock-devices UX as a module. Use the options in the UX to switch to view any of the other modules running the mock-devices engine. To use the UX, RDP to the local Edge box and launch a browser to http://127.0.0.1:9000. By setting the appropriate createOptions, the UX module on Edge box can be accessed via the local network using the IP and same port i.e. http://192.168.0.2:9000
+**mdux**  is a Docker container build of the desktop edition. It is designed to run inside containers with no access to file systems. It is a fully functional UX + engine mock-devices instance and is useful for localhost scenarios. It can be launched at http://127.0.0.1:9000 on the host machine. It can also be used to connect to any mock-devices engine using IP or DNS i.e. mock-devices-de modules within the same Edge runtime
 
 ```
   "mockDevicesUx": {
@@ -61,10 +80,12 @@ The following module configuration will add the mock-devices UX as a module. Use
       }
   },
 ```
+Configure the appropriate createOptions to allow the UX to be accessed off box via LAN and/or external (configure firewall separately)
 
+# How to use in an IoT Central Edge device template
+The mock-devices-edge module can be added to an IoT Central device template to use mock-devices with module simulation inside an application
 
-
-## How to use in an IoT Central Edge device template (DTDLv1 Device Capability Model)
+## DTDLv1 Device Capability Model
 Import the following capability model into a new IoT Central device template. Once imported, add a module for every instance of mock-devices to match the Edge manifest. When adding the instance update the identity and set "Relationship name" and "Name" to the instance values used in the Edge manifest
 
 [DCM](/dcm.json)
@@ -221,7 +242,7 @@ Import the following capability model into a new IoT Central device template. On
 ```
 
 ## Developers
-mock-devices can be fully controlled via REST endpoint and curl and therefore this module can be forked to enable more functionality or just bypassed for a custom implementation. Visit [the docs](https://github.com/codetunez/mock-devices-de/blob/master/readme.MD) to see the full API
+mock-devices-de can be fully controlled via REST and therefore this module can be forked to enable more functionality. Visit [the docs](https://github.com/codetunez/mock-devices-de/blob/master/readme.MD) to see the full API
 
 ### Docker build and deploy
 Building the container\
