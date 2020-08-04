@@ -22,6 +22,8 @@ var pjson = require('./package.json');
 console.log('mock-devices-edge starting up - version' + pjson.version);
 
 let latestState = {};
+let reportPayload = {};
+
 ModuleClient.fromEnvironment(Protocol, function (err, client) {
     if (err) {
         console.error('Could not create client from Environment: ' + err.toString());
@@ -41,6 +43,7 @@ ModuleClient.fromEnvironment(Protocol, function (err, client) {
             };
 
             console.log('Starting client');
+            reportPayload = { "status": "Client started " + pjson.version }
 
             client.onMethod('start', (request, response) => {
 
@@ -54,6 +57,7 @@ ModuleClient.fromEnvironment(Protocol, function (err, client) {
                         .then((res) => {
                             response.send(200, 'Start success'), (err) => {
                                 if (err) { console.log('Start response error:' + err.message); return; }
+                                reportPayload = { "status": `[${new Date().toISOString()}] Start for ${methodPayload}` }
                             }
                             console.log('Start completed');
                         })
@@ -77,6 +81,7 @@ ModuleClient.fromEnvironment(Protocol, function (err, client) {
                         .then((res) => {
                             response.send(200, 'Stop success'), (err) => {
                                 if (err) { console.log('Stop response error:' + err.message); return; }
+                                reportPayload = { "status": `[${new Date().toISOString()}] Stop for ${methodPayload}` }
                             }
                             console.log('Stop completed');
                         })
@@ -100,6 +105,7 @@ ModuleClient.fromEnvironment(Protocol, function (err, client) {
                         .then((res) => {
                             response.send(200, 'Restart success'), (err) => {
                                 if (err) { console.log('Restart response error:' + err.message); return; }
+                                reportPayload = { "status": `[${new Date().toISOString()}] Restart for ${methodPayload}` }
                             }
                             console.log('Restart completed');
                         })
@@ -121,12 +127,20 @@ ModuleClient.fromEnvironment(Protocol, function (err, client) {
                             axios.get(delta['fileURI'])
                                 .then((res) => {
                                     latestState = res.data;
+                                    reportPayload = { "status": `[${new Date().toISOString()}] State file fetched` }
                                 })
                                 .catch((err) => {
                                     console.error(`Fetch get error: ${err.message}`);
                                 })
                         }
                     });
+
+                    setInterval(() => {
+                        twin.properties.reported.update(reportPayload, ((err) => {
+                            if (err) { console.log('Report send error:' + err.message); return; }
+                            reportPayload = {};
+                        }))
+                    }, 1000);
                 }
             });
 

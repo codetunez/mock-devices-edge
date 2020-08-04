@@ -1,6 +1,6 @@
 {
   "name": "mockDevicesEdge",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "An Edge module that controls mock-devices-de",
   "repository": {
     "type": "git",
