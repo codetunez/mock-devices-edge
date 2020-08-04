@@ -1,6 +1,6 @@
 # mock-devices-edge v1 (Edge Module)
 
-mock-devices-edge is an Azure IoT Edge Docker container module that enables basic control of mock-devices when the latter is deployed as a simulation engine Edge module. This module can be used to integrate adapters, connectors or anything that can interface with an Edge module. This repo details the steps to add this and instances of mock-device-de as modules in an Edge deployment manifest
+mock-devices-edge is an Azure IoT Edge module that enables basic control of mock-devices when the latter is deployed as a simulation engine Edge module. This module can be used to integrate adapters, connectors or anything that can interface with an Edge module. This repo details the steps to add this and instances of mock-device-de as modules in an Edge deployment manifest
 
 Please visit the links to learn more about [mock-devices *(desktop edition)*](https://github.com/codetunez/mock-devices) and [mock-devices-de *(docker edition)*](https://github.com/codetunez/mock-devices-de)
 
